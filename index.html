@@ -577,271 +577,40 @@
         </div>
     </div>
 
+    
+
     <script>
-        const GOOGLE_SCRIPT_URL =
-        'https://script.google.com/a/macros/menageparfait.fr/s/AKfycby76H5PvbWRLCIpWmvhX3x_TN0vq8ZZuNMMFIJ1-egIUvpYCO7LjxVJhLXlVwRP0kL2/exec';
-        // User will replace this
-        const answers = new Array(5).fill(null);
-        let contactInfo = {};
-        let currentQuestion = 0;
+        async function sendDataToGoogleSheet(data) {
+  const url = 'https://script.google.com/a/macros/menageparfait.fr/s/AKfycby76H5PvbWRLCIpWmvhX3x_TN0vq8ZZuNMMFIJ1-egIUvpYCO7LjxVJhLXlVwRP0kL2/exec'; // Replace with your web app URL
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Origin': 'https://baroudecolombbus.github.io' // Match the origin in validateOrigin
+    },
+    body: JSON.stringify(data)
+  });
 
-        async function saveToGoogleSheets(formData) {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const result = await response.json();
+  console.log(result); // Log the response from Google Apps Script
+}
 
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    signal: controller.signal
-                });
+// Example data to send
+const data = {
+  name: "John Doe",
+  email: "john@example.com",
+  phone: "1234567890",
+  answers: ["A1", "A2"],
+  mainScore: 5,
+  urgentScore: 4,
+  qualityScore: 3,
+  efficiencyScore: 2
+};
 
-                clearTimeout(timeoutId);
+// Call the function to send data
+sendDataToGoogleSheet(data);
+        
 
-                if (!response.ok) {
-                    throw new Error('Failed to save response');
-                }
-
-                const result = await response.json();
-                if (result.status === 'error') {
-                    throw new Error(result.message);
-                }
-
-                console.log('Data saved successfully!');
-            } catch (error) {
-                console.error('Error saving data:', error);
-                alert('Error saving your response. Please try again later.');
-                throw error;
-            }
-        }
-
-        function validateAndProceed() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-
-            if (!name || !email || !phone) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-
-            contactInfo = {
-                name,
-                email,
-                phone
-            };
-            document.getElementById('contact-section').style.display = 'none';
-            document.getElementById('survey-section').style.display = 'block';
-            document.querySelector('.progress-container').style.display = 'block';
-
-            showQuestion(0);
-        }
-
-        function showQuestion(index) {
-            const questions = document.querySelectorAll('.survey-question');
-            questions.forEach(q => q.classList.remove('active'));
-            questions[index].classList.add('active');
-            currentQuestion = index;
-        }
-
-        function answerQuestion(index, answer, button) {
-            const btnGroup = button.parentElement;
-            btnGroup.querySelectorAll('.btn').forEach(btn => btn.classList.remove('selected'));
-            button.classList.add('selected');
-
-            answers[index] = answer;
-            updateProgress();
-
-            setTimeout(() => {
-                if (currentQuestion < 4) {
-                    showQuestion(currentQuestion + 1);
-                }
-            }, 500);
-        }
-
-        function updateProgress() {
-            const answered = answers.filter(answer => answer !== null).length;
-            const progress = (answered / answers.length) * 100;
-
-            document.querySelector('.progress-bar').style.width = `${progress}%`;
-            document.querySelector('.progress-text').textContent = `${Math.round(progress)}%`;
-
-            document.querySelector('.btn-submit').style.display =
-                answered === answers.length ? 'block' : 'none';
-        }
-
-        function calculateScores() {
-            const yesAnswers = answers.filter(a => a === 'yes').length;
-            const mainScore = Math.round((yesAnswers / answers.length) * 100);
-
-            const urgentScore = Math.round(
-                ((answers[1] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
-            );
-
-            const qualityScore = Math.round(
-                ((answers[3] === 'yes' ? 1 : 0) + (answers[4] === 'yes' ? 1 : 0)) / 2 * 100
-            );
-
-            const efficiencyScore = Math.round(
-                ((answers[0] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
-            );
-
-            return {
-                mainScore,
-                urgentScore,
-                qualityScore,
-                efficiencyScore
-            };
-        }
-
-        function generateFindings() {
-            const findings = [];
-
-            if (answers[0] === 'yes') {
-                findings.push(
-                    "Your large portfolio indicates significant potential for standardized cleaning protocols and economies of scale."
-                );
-            }
-
-            if (answers[1] === 'yes' || answers[2] === 'yes') {
-                findings.push(
-                    "Service reliability issues identified - our 24/7 availability and dedicated team can address your urgent needs."
-                );
-            }
-
-            if (answers[3] === 'yes') {
-                findings.push(
-                    "Tenant satisfaction improvements possible through our quality-focused cleaning programs and regular quality checks."
-                );
-            }
-
-            if (answers[4] === 'yes') {
-                findings.push(
-                    "Your openness to outsourcing aligns with our comprehensive facility maintenance solutions - <strong>we can help streamline operations.</strong>"
-                );
-            }
-
-            if (findings.length === 0) {
-                findings.push(
-                    "Based on your responses, we can help optimize your current cleaning operations for better efficiency and quality."
-                );
-            }
-
-            return findings;
-        }
-
-        function animateValue(element, start, end, duration) {
-            const range = end - start;
-            const increment = range / (duration / 16);
-            let current = start;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-                    clearInterval(timer);
-                    current = end;
-                }
-                element.textContent = Math.round(current) + '%';
-            }, 16);
-        }
-
-        async function showResults() {
-            const scores = calculateScores();
-            const findings = generateFindings();
-
-            // Save data to Google Sheets
-            const formData = {
-                timestamp: new Date().toISOString(),
-                name: contactInfo.name,
-                email: contactInfo.email,
-                phone: contactInfo.phone,
-                answers: answers.join(','),
-                mainScore: scores.mainScore,
-                urgentScore: scores.urgentScore,
-                qualityScore: scores.qualityScore,
-                efficiencyScore: scores.efficiencyScore
-            };
-
-            // Save to Google Sheets
-            await saveToGoogleSheets(formData);
-
-            document.getElementById('survey-section').style.display = 'none';
-            document.getElementById('results-section').style.display = 'block';
-
-            // Update main score with color
-            const mainScoreElement = document.getElementById('mainScore');
-            mainScoreElement.classList.remove('score-low', 'score-medium', 'score-high');
-            if (scores.mainScore <= 40) {
-                mainScoreElement.classList.add('score-low');
-            } else if (scores.mainScore <= 70) {
-                mainScoreElement.classList.add('score-medium');
-            } else {
-                mainScoreElement.classList.add('score-high');
-            }
-            animateValue(mainScoreElement, 0, scores.mainScore, 1000);
-
-            // Update bars
-            const updateBar = (barId, scoreId, score) => {
-                const bar = document.getElementById(barId);
-                const scoreElement = document.getElementById(scoreId);
-                bar.style.width = score + '%';
-                animateValue(scoreElement, 0, score, 1000);
-            };
-
-            updateBar('urgentBar', 'urgentScore', scores.urgentScore);
-            updateBar('qualityBar', 'qualityScore', scores.qualityScore);
-            updateBar('efficiencyBar', 'efficiencyScore', scores.efficiencyScore);
-
-            // Update findings
-            const findingsList = document.getElementById('findingsList');
-            findingsList.innerHTML = findings
-                .map(finding => `<div class="finding-item">${finding}</div>`)
-                .join('');
-        }
-
-        function submitForm() {
-            showResults();
-        }
-
-        function handleContactClick() {
-            const contactInfo = document.getElementById('contactInfo');
-            contactInfo.style.display = 'block';
-
-            // Update mailto link with assessment results
-            const scores = calculateScores();
-            const findings = generateFindings();
-
-            const mailtoLink = document.getElementById('mailtoLink');
-            const subject = "Portfolio Assessment Results - Request for Custom Solution";
-            const body = `Hi CleanStream team,
-
-I've just completed your portfolio assessment with the following results:
-
-Overall Optimization Potential: ${scores.mainScore}%
-- Urgent Needs Score: ${scores.urgentScore}%
-- Quality Impact Score: ${scores.qualityScore}%
-- Efficiency Potential: ${scores.efficiencyScore}%
-
-Key Findings:
-${findings.join('\n')}
-
-I'm interested in learning more about your solutions for my portfolio.
-
-Best regards,
-${contactInfo.name || ''}`;
-
-            const mailtoUrl =
-                `mailto:solutions@cleanstream.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            mailtoLink.href = mailtoUrl;
-        }
     </script>
 </body>
 
