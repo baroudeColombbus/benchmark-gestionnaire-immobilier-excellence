@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Performance Boost | Ménage PArfait Corporate Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: #f9f9f9;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a3c40 0%, #2d6b74 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .scorecard-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            margin: 4rem 0;
+        }
+
+        .scorecard-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .scorecard-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Form Styles */
+        .cta-section {
+            text-align: center;
+            background: #fff;
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+            border-radius: 12px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #2d6b74;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Question Styles */
+        .survey-section {
+            display: none;
+        }
+
+        .survey-question {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            position: absolute;
+            width: 100%;
+            left: 0;
+        }
+
+        .survey-question.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .question-container {
+            position: relative;
+            min-height: 200px;
+            margin: 20px 0;
+        }
+
+        .question-number {
+            color: #2d6b74;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Button Styles */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-yes,
+        .btn-no {
+            background: #f0f0f0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .btn-yes:hover {
+            background: #e3f2fd;
+        }
+
+        .btn-no:hover {
+            background: #fafafa;
+        }
+
+        .btn-yes.selected {
+            background: #2d6b74;
+            color: white;
+        }
+
+        .btn-no.selected {
+            background: #666;
+            color: white;
+        }
+
+        .btn-next,
+        .btn-submit {
+            background: #2d6b74;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            display: none;
+        }
+
+        /* Results Section Styles */
+        .results-section {
+            display: none;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .results-header {
+            text-align: center;
+            color: #2d6b74;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .optimization-score {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 8px solid #2d6b74;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2d6b74;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Custom Bar Chart Styles */
+        .bar-chart {
+            margin: 2rem 0;
+        }
+
+        .bar-item {
+            margin: 1rem 0;
+        }
+
+        .bar-label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .bar-outer {
+            background: #f0f0f0;
+            height: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            background: #2d6b74;
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .bar-value {
+            margin-left: 10px;
+            font-weight: bold;
+            color: #2d6b74;
+        }
+
+        /* Score bars */
+        .urgent-bar {
+            background: #e74c3c;
+        }
+
+        /* Red for urgency */
+        .quality-bar {
+            background: #f39c12;
+        }
+
+        /* Amber for quality */
+        .efficiency-bar {
+            background: #27ae60;
+        }
+
+        /* Green for efficiency */
+
+        /* Score circle colors based on value */
+        .score-low {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        /* Below 40% */
+        .score-medium {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+
+        /* 40-70% */
+        .score-high {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        /* Above 70% */
+
+        .findings-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9f9;
+            border-radius: 8px;
+        }
+
+        .findings-title {
+            font-size: 1.2rem;
+            color: #2d6b74;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .finding-item {
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .finding-item:before {
+            content: "•";
+            color: #2d6b74;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #1a3c40 0%, #2d6b74 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .action-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-description {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .btn-contact {
+            background: white;
+            color: #2d6b74;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>The Property Management Cleanliness Scorecard</h1>
+        <p>Find out in 1 min if partnerships would complement your growth strategy – the
+            answer may surprise you...
+        </p>
+    </header>
+
+    <div class="container">
+        <div class="scorecard-grid">
+            <div class="scorecard-item">
+                <h2>🏢 Portfolio Health Check</h2>
+                <ul>
+                    <li>Are maintenance costs exceeding projections?</li>
+                    <li>Getting tenant complaints about facility conditions?</li>
+                    <li>Struggling with consistent service quality across locations?</li>
+                </ul>
+            </div>
+
+            <div class="scorecard-item">
+                <h2>📈 Performance Metrics</h2>
+                <ul>
+                    <li>What's your current tenant retention rate?</li>
+                    <li>How quickly do vacant units turn around?</li>
+                    <li>What's your cost per square foot for maintenance?</li>
+                </ul>
+            </div>
+
+            <div class="scorecard-item">
+                <h2>🚀 Growth Opportunities</h2>
+                <ul>
+                    <li>Could better presentation justify higher rents?</li>
+                    <li>Would predictive maintenance reduce emergency costs?</li>
+                    <li>Could standardized services improve brand perception?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <section class="cta-section">
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Discover your Score and enter your details to get started
+        </h2>
+        <p style="font-size: .6rem; margin-bottom: .5rem; text-align: center;">This quiz is a powerful tool designed to
+            help you understand
+            your current cleanness landscape and identify
+            opportunities for revenue optimisation. <br> tailored insights, you can make informed decisions to drive
+            satisfaction, boost profits, and achieve your business goals.</p>
+        <p style="margin-bottom: 2rem;">Answer 15 questions and we’ll get you a personalised cleaning report</p>
+
+
+
+        <div class="form-container">
+            <div id="contact-section">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Corporate Email" required>
+                <input type="tel" id="phone" placeholder="Telephone" required>
+                <button class="btn btn-next" onclick="validateAndProceed()">Get my business score
+                    Scorecard</button>
+            </div>
+
+            <div id="survey-section" class="survey-section">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-text">0%</div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="survey-question">
+                        <div class="question-number">Question 1 of 5</div>
+                        <p>Do you manage more than 100 units?</p>
+                        <div class="btn-group">
+                            <button class="btn btn-yes" onclick="answerQuestion(0, 'yes', this)">Yes</button>
+                            <button class="btn btn-no" onclick="answerQuestion(0, 'no', this)">No</button>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <div class="question-number">Question 2 of 5</div>
+                        <p>Do you struggle with cleaning vendors missing scheduled appointments?</p>
+                        <div class="btn-group">
+                            <button class="btn btn-yes" onclick="answerQuestion(1, 'yes', this)">Yes</button>
+                            <button class="btn btn-no" onclick="answerQuestion(1, 'no', this)">No</button>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <div class="question-number">Question 3 of 5</div>
+                        <p>Is same-day availability for urgent cleaning requests a priority?</p>
+                        <div class="btn-group">
+                            <button class="btn btn-yes" onclick="answerQuestion(2, 'yes', this)">Yes</button>
+                            <button class="btn btn-no" onclick="answerQuestion(2, 'no', this)">No</button>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <div class="question-number">Question 4 of 5</div>
+                        <p>Does poor cleaning quality lead to tenant complaints in your portfolio?</p>
+                        <div class="btn-group">
+                            <button class="btn btn-yes" onclick="answerQuestion(3, 'yes', this)">Yes</button>
+                            <button class="btn btn-no" onclick="answerQuestion(3, 'no', this)">No</button>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <div class="question-number">Question 5 of 5</div>
+                        <p>Would you consider outsourcing facility maintenance to improve quality?</p>
+                        <div class="btn-group">
+                            <button class="btn btn-yes" onclick="answerQuestion(4, 'yes', this)">Yes</button>
+                            <button class="btn btn-no" onclick="answerQuestion(4, 'no', this)">No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-submit" onclick="submitForm()">Submit Assessment</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="results-section" class="results-section">
+        <div class="results-card">
+            <div class="results-header">Your Portfolio Assessment Results</div>
+
+            <div class="optimization-score">
+                <div class="score-circle" id="mainScore">0%</div>
+                <div class="score-label">Portfolio Optimization Potential</div>
+            </div>
+
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">Urgent Needs Score</div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" id="urgentBar"></div>
+                    </div>
+                    <div class="bar-value" id="urgentScore">0%</div>
+                </div>
+
+                <div class="bar-item">
+                    <div class="bar-label">Quality Impact Score</div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" id="qualityBar"></div>
+                    </div>
+                    <div class="bar-value" id="qualityScore">0%</div>
+                </div>
+
+                <div class="bar-item">
+                    <div class="bar-label">Efficiency Potential</div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" id="efficiencyBar"></div>
+                    </div>
+                    <div class="bar-value" id="efficiencyScore">0%</div>
+                </div>
+            </div>
+
+            <div class="findings-section">
+                <div class="findings-title">Key Findings & Recommendations</div>
+                <div id="findingsList"></div>
+            </div>
+        </div>
+
+        <div class="action-card">
+            <div class="action-title">Ready to Optimize Your Portfolio?</div>
+            <div class="action-description">
+                Our experts are ready to provide a detailed solution based on your assessment results.
+            </div>
+            <button class="btn-contact" onclick="handleContactClick()">Get Your Custom Solution</button>
+
+            <div class="contact-info" id="contactInfo">
+                📞 Call us: (555) 123-4567<br>
+                📧 <a href="#" id="mailtoLink" style="color: white; text-decoration: underline;">Email:
+                    solutions@cleanstream.com</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const answers = new Array(5).fill(null);
+        let contactInfo = {};
+        let currentQuestion = 0;
+
+        function validateAndProceed() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (!name || !email || !phone) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            contactInfo = {
+                name,
+                email,
+                phone
+            };
+            document.getElementById('contact-section').style.display = 'none';
+            document.getElementById('survey-section').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const questions = document.querySelectorAll('.survey-question');
+            questions.forEach(q => q.classList.remove('active'));
+            questions[index].classList.add('active');
+            currentQuestion = index;
+        }
+
+        function answerQuestion(index, answer, button) {
+            const btnGroup = button.parentElement;
+            btnGroup.querySelectorAll('.btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            answers[index] = answer;
+            updateProgress();
+
+            setTimeout(() => {
+                if (currentQuestion < 4) {
+                    showQuestion(currentQuestion + 1);
+                }
+            }, 500);
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(answer => answer !== null).length;
+            const progress = (answered / answers.length) * 100;
+
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+            document.querySelector('.progress-text').textContent = `${Math.round(progress)}%`;
+
+            document.querySelector('.btn-submit').style.display =
+                answered === answers.length ? 'block' : 'none';
+        }
+
+        function calculateScores() {
+            const yesAnswers = answers.filter(a => a === 'yes').length;
+            const mainScore = Math.round((yesAnswers / answers.length) * 100);
+
+            const urgentScore = Math.round(
+                ((answers[1] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            const qualityScore = Math.round(
+                ((answers[3] === 'yes' ? 1 : 0) + (answers[4] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            const efficiencyScore = Math.round(
+                ((answers[0] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            return {
+                mainScore,
+                urgentScore,
+                qualityScore,
+                efficiencyScore
+            };
+        }
+
+        function generateFindings() {
+            const findings = [];
+
+            if (answers[0] === 'yes') {
+                findings.push(
+                    "Your large portfolio indicates significant potential for standardized cleaning protocols and economies of scale."
+                );
+            }
+
+            if (answers[1] === 'yes' || answers[2] === 'yes') {
+                findings.push(
+                    "Service reliability issues identified - our 24/7 availability and dedicated team can address your urgent needs."
+                );
+            }
+
+            if (answers[3] === 'yes') {
+                findings.push(
+                    "Tenant satisfaction improvements possible through our quality-focused cleaning programs and regular quality checks."
+                );
+            }
+
+            if (answers[4] === 'yes') {
+                findings.push(
+                    "Your openness to outsourcing aligns with our comprehensive facility maintenance solutions - <strong>we can help streamline operations.</strong>"
+                );
+            }
+
+            if (findings.length === 0) {
+                findings.push(
+                    "Based on your responses, we can help optimize your current cleaning operations for better efficiency and quality."
+                );
+            }
+
+            return findings;
+        }
+
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    clearInterval(timer);
+                    current = end;
+                }
+                element.textContent = Math.round(current) + '%';
+            }, 16);
+        }
+
+        //  function showResults() {
+        //      const scores = calculateScores();
+        //      const findings = generateFindings();
+
+        //      // Hide survey section and show results
+        //      document.getElementById('survey-section').style.display = 'none';
+        //      document.getElementById('results-section').style.display = 'block';
+
+        //      // Animate main score
+        //      const mainScoreElement = document.getElementById('mainScore');
+        //      animateValue(mainScoreElement, 0, scores.mainScore, 1000);
+
+        //      // Animate and update bars
+        //      const updateBar = (barId, scoreId, score) => {
+        //          const bar = document.getElementById(barId);
+        //          const scoreElement = document.getElementById(scoreId);
+        //          bar.style.width = score + '%';
+        //          animateValue(scoreElement, 0, score, 1000);
+        //      };
+
+        //      updateBar('urgentBar', 'urgentScore', scores.urgentScore);
+        //      updateBar('qualityBar', 'qualityScore', scores.qualityScore);
+        //      updateBar('efficiencyBar', 'efficiencyScore', scores.efficiencyScore);
+
+        //      // Update findings
+        //      const findingsList = document.getElementById('findingsList');
+        //      findingsList.innerHTML = findings
+        //          .map(finding => `<div class="finding-item">${finding}</div>`)
+        //          .join('');
+        //  }
+
+        function showResults() {
+            const scores = calculateScores();
+            const findings = generateFindings();
+
+            document.getElementById('survey-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            // Update main score with color
+            const mainScoreElement = document.getElementById('mainScore');
+            mainScoreElement.classList.remove('score-low', 'score-medium', 'score-high');
+            if (scores.mainScore <= 40) {
+                mainScoreElement.classList.add('score-low');
+            } else if (scores.mainScore <= 70) {
+                mainScoreElement.classList.add('score-medium');
+            } else {
+                mainScoreElement.classList.add('score-high');
+            }
+            animateValue(mainScoreElement, 0, scores.mainScore,
+            1000); // Update bars (they'll automatically use the new colors from CSS) 
+            const updateBar = (barId, scoreId, score) => {
+                const bar = document.getElementById(barId);
+                const scoreElement = document.getElementById(scoreId);
+                bar.style.width = score + '%';
+                animateValue(scoreElement, 0, score, 1000);
+            };
+
+            updateBar('urgentBar', 'urgentScore', scores.urgentScore);
+            updateBar('qualityBar', 'qualityScore', scores.qualityScore);
+            updateBar('efficiencyBar', 'efficiencyScore', scores.efficiencyScore);
+
+            // Update findings
+            const findingsList = document.getElementById('findingsList');
+            findingsList.innerHTML = findings
+                .map(finding => `<div class="finding-item">${finding}</div>`)
+                .join('');
+        }
+
+        function submitForm() {
+            const formData = {
+                ...contactInfo,
+                surveyAnswers: answers
+            };
+
+            console.log('Form submitted:', formData);
+            showResults();
+        }
+
+        function handleContactClick() {
+            const contactInfo = document.getElementById('contactInfo');
+            contactInfo.style.display = 'block';
+
+            // Update mailto link with assessment results
+            const scores = calculateScores();
+            const findings = generateFindings();
+
+            const mailtoLink = document.getElementById('mailtoLink');
+            const subject = "Portfolio Assessment Results - Request for Custom Solution";
+            const body = `Hi CleanStream team,
+
+I've just completed your portfolio assessment with the following results:
+
+Overall Optimization Potential: ${scores.mainScore}%
+- Urgent Needs Score: ${scores.urgentScore}%
+- Quality Impact Score: ${scores.qualityScore}%
+- Efficiency Potential: ${scores.efficiencyScore}%
+
+Key Findings:
+${findings.join('\n')}
+
+I'm interested in learning more about your solutions for my portfolio.
+
+Best regards,
+${contactInfo.name || ''}`;
+
+            const mailtoUrl =
+                `mailto:solutions@cleanstream.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            mailtoLink.href = mailtoUrl;
+        }
+    </script>
+    <script>
+        const GOOGLE_SCRIPT_URL =
+        'https://script.google.com/a/macros/menageparfait.fr/s/AKfycby76H5PvbWRLCIpWmvhX3x_TN0vq8ZZuNMMFIJ1-egIUvpYCO7LjxVJhLXlVwRP0kL2/exec';
+        // User will replace this
+        const answers = new Array(5).fill(null);
+        let contactInfo = {};
+        let currentQuestion = 0;
+
+        async function saveToGoogleSheets(formData) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error('Failed to save response');
+                }
+
+                const result = await response.json();
+                if (result.status === 'error') {
+                    throw new Error(result.message);
+                }
+
+                console.log('Data saved successfully!');
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Error saving your response. Please try again later.');
+                throw error;
+            }
+        }
+
+        function validateAndProceed() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (!name || !email || !phone) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            contactInfo = {
+                name,
+                email,
+                phone
+            };
+            document.getElementById('contact-section').style.display = 'none';
+            document.getElementById('survey-section').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const questions = document.querySelectorAll('.survey-question');
+            questions.forEach(q => q.classList.remove('active'));
+            questions[index].classList.add('active');
+            currentQuestion = index;
+        }
+
+        function answerQuestion(index, answer, button) {
+            const btnGroup = button.parentElement;
+            btnGroup.querySelectorAll('.btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            answers[index] = answer;
+            updateProgress();
+
+            setTimeout(() => {
+                if (currentQuestion < 4) {
+                    showQuestion(currentQuestion + 1);
+                }
+            }, 500);
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(answer => answer !== null).length;
+            const progress = (answered / answers.length) * 100;
+
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+            document.querySelector('.progress-text').textContent = `${Math.round(progress)}%`;
+
+            document.querySelector('.btn-submit').style.display =
+                answered === answers.length ? 'block' : 'none';
+        }
+
+        function calculateScores() {
+            const yesAnswers = answers.filter(a => a === 'yes').length;
+            const mainScore = Math.round((yesAnswers / answers.length) * 100);
+
+            const urgentScore = Math.round(
+                ((answers[1] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            const qualityScore = Math.round(
+                ((answers[3] === 'yes' ? 1 : 0) + (answers[4] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            const efficiencyScore = Math.round(
+                ((answers[0] === 'yes' ? 1 : 0) + (answers[2] === 'yes' ? 1 : 0)) / 2 * 100
+            );
+
+            return {
+                mainScore,
+                urgentScore,
+                qualityScore,
+                efficiencyScore
+            };
+        }
+
+        function generateFindings() {
+            const findings = [];
+
+            if (answers[0] === 'yes') {
+                findings.push(
+                    "Your large portfolio indicates significant potential for standardized cleaning protocols and economies of scale."
+                );
+            }
+
+            if (answers[1] === 'yes' || answers[2] === 'yes') {
+                findings.push(
+                    "Service reliability issues identified - our 24/7 availability and dedicated team can address your urgent needs."
+                );
+            }
+
+            if (answers[3] === 'yes') {
+                findings.push(
+                    "Tenant satisfaction improvements possible through our quality-focused cleaning programs and regular quality checks."
+                );
+            }
+
+            if (answers[4] === 'yes') {
+                findings.push(
+                    "Your openness to outsourcing aligns with our comprehensive facility maintenance solutions - <strong>we can help streamline operations.</strong>"
+                );
+            }
+
+            if (findings.length === 0) {
+                findings.push(
+                    "Based on your responses, we can help optimize your current cleaning operations for better efficiency and quality."
+                );
+            }
+
+            return findings;
+        }
+
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    clearInterval(timer);
+                    current = end;
+                }
+                element.textContent = Math.round(current) + '%';
+            }, 16);
+        }
+
+        async function showResults() {
+            const scores = calculateScores();
+            const findings = generateFindings();
+
+            // Save data to Google Sheets
+            const formData = {
+                timestamp: new Date().toISOString(),
+                name: contactInfo.name,
+                email: contactInfo.email,
+                phone: contactInfo.phone,
+                answers: answers.join(','),
+                mainScore: scores.mainScore,
+                urgentScore: scores.urgentScore,
+                qualityScore: scores.qualityScore,
+                efficiencyScore: scores.efficiencyScore
+            };
+
+            // Save to Google Sheets
+            await saveToGoogleSheets(formData);
+
+            document.getElementById('survey-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            // Update main score with color
+            const mainScoreElement = document.getElementById('mainScore');
+            mainScoreElement.classList.remove('score-low', 'score-medium', 'score-high');
+            if (scores.mainScore <= 40) {
+                mainScoreElement.classList.add('score-low');
+            } else if (scores.mainScore <= 70) {
+                mainScoreElement.classList.add('score-medium');
+            } else {
+                mainScoreElement.classList.add('score-high');
+            }
+            animateValue(mainScoreElement, 0, scores.mainScore, 1000);
+
+            // Update bars
+            const updateBar = (barId, scoreId, score) => {
+                const bar = document.getElementById(barId);
+                const scoreElement = document.getElementById(scoreId);
+                bar.style.width = score + '%';
+                animateValue(scoreElement, 0, score, 1000);
+            };
+
+            updateBar('urgentBar', 'urgentScore', scores.urgentScore);
+            updateBar('qualityBar', 'qualityScore', scores.qualityScore);
+            updateBar('efficiencyBar', 'efficiencyScore', scores.efficiencyScore);
+
+            // Update findings
+            const findingsList = document.getElementById('findingsList');
+            findingsList.innerHTML = findings
+                .map(finding => `<div class="finding-item">${finding}</div>`)
+                .join('');
+        }
+
+        function submitForm() {
+            showResults();
+        }
+
+        function handleContactClick() {
+            const contactInfo = document.getElementById('contactInfo');
+            contactInfo.style.display = 'block';
+
+            // Update mailto link with assessment results
+            const scores = calculateScores();
+            const findings = generateFindings();
+
+            const mailtoLink = document.getElementById('mailtoLink');
+            const subject = "Portfolio Assessment Results - Request for Custom Solution";
+            const body = `Hi CleanStream team,
+
+I've just completed your portfolio assessment with the following results:
+
+Overall Optimization Potential: ${scores.mainScore}%
+- Urgent Needs Score: ${scores.urgentScore}%
+- Quality Impact Score: ${scores.qualityScore}%
+- Efficiency Potential: ${scores.efficiencyScore}%
+
+Key Findings:
+${findings.join('\n')}
+
+I'm interested in learning more about your solutions for my portfolio.
+
+Best regards,
+${contactInfo.name || ''}`;
+
+            const mailtoUrl =
+                `mailto:solutions@cleanstream.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            mailtoLink.href = mailtoUrl;
+        }
+    </script>
+</body>
+
+</html>
